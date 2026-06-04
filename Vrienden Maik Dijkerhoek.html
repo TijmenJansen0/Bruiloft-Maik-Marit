@@ -1,0 +1,1594 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trouw Weekend Miljonairs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a3a 0%, #2d1b69 30%, #8b2a8b 100%);
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+        }
+        
+        /* Intro Animation Styles */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a3a 0%, #2d1b69 30%, #8b2a8b 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: introFadeIn 2s ease-in-out;
+        }
+        
+        .intro-logo {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #4a4a8a 0%, #2a2a5a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid #ffd700;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.6);
+            animation: logoSpin 3s ease-in-out;
+            margin-bottom: 40px;
+        }
+        
+        .intro-logo-text {
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            text-align: center;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .intro-subtitle {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideUp 2s ease-out 1s both;
+            opacity: 0;
+        }
+        
+        @keyframes introFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes logoSpin {
+            0% { transform: scale(0.5) rotate(-180deg); opacity: 0; }
+            50% { transform: scale(1.1) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        @keyframes textGlow {
+            0% { text-shadow: 3px 3px 6px rgba(0,0,0,0.7), 0 0 20px rgba(255, 215, 0, 0.5); }
+            100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.7), 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+        
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Round Popup Styles */
+        .round-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            animation: popupFadeIn 1s ease-in-out;
+        }
+        
+        .popup-content {
+            background: linear-gradient(145deg, #2a2a5c, #1a1a3a);
+            padding: 60px;
+            border-radius: 30px;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            text-align: center;
+            animation: popupScale 0.8s ease-out;
+        }
+        
+        .popup-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .continue-icon {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: bounce 2s infinite;
+            margin-top: 30px;
+        }
+        
+        .continue-icon img {
+            width: 120px;
+            height: auto;
+            transition: all 0.3s ease;
+        }
+        
+        .continue-icon:hover img {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+        
+        @keyframes popupFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes popupScale {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Image Popup Styles */
+        .image-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: popupFadeIn 0.5s ease-in-out;
+        }
+        
+        .image-popup img {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-popup img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Main Game Styles */
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .container.visible {
+            opacity: 1;
+        }
+        
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+            justify-content: space-between;
+            height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .player-info {
+            background: linear-gradient(145deg, #2a2a5c, #1a1a3a);
+            padding: 15px;
+            border-radius: 25px;
+            border: 2px solid #4a90e2;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+            text-align: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            flex-shrink: 0;
+        }
+        
+        .help-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .help-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #4a90e2;
+            background: rgba(74, 144, 226, 0.2);
+            color: #4a90e2;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .help-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+        
+        .help-btn.used {
+            filter: grayscale(100%);
+            background: rgba(74, 144, 226, 0.8);
+            color: #1a1a3a;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        .logo {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #4a4a8a 0%, #2a2a5a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .question-container {
+            background: linear-gradient(145deg, #1a1a3a, #2a2a5c);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid #4a90e2;
+            box-shadow: 0 0 30px rgba(74, 144, 226, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .question-text {
+            font-size: 50px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            line-height: 1.3;
+        }
+        .question-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+            cursor: default;
+            transition: transform 0.3s ease;
+            display: block;
+            margin: auto;
+        }
+        
+        .question-image:hover {
+            /* Remove the transform to make it non-interactive */
+        }
+
+        
+        .answer-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .answer-overlay.show {
+            opacity: 1;
+        }
+        
+        .question-container {
+            position: relative;
+        }
+
+        .controls {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .control-btn {
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .correct-btn {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+            color: white;
+        }
+        
+        .wrong-btn {
+            background: linear-gradient(145deg, #dc3545, #c82333);
+            color: white;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        
+        .right-panel {
+            width: 300px;
+            background: linear-gradient(180deg, #1a1a3a 0%, #2a2a5c 100%);
+            border-left: 3px solid #4a90e2;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px 10px;
+        }
+        
+        .money-ladder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+        }
+        
+        .money-level {
+            background: linear-gradient(145deg, #2a2a5c, #1a1a3a);
+            margin: 2px 0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #4a90e2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+            font-size: 14px;
+            position: relative;
+        }
+        
+        /* Funnel effect - each level gets progressively wider */
+        .money-level:nth-child(12) { width: 95%; margin-left: 2.5%; }
+        .money-level:nth-child(11) { width: 90%; margin-left: 5%; }
+        .money-level:nth-child(10) { width: 85%; margin-left: 7.5%; }
+        .money-level:nth-child(9) { width: 80%; margin-left: 10%; }
+        .money-level:nth-child(8) { width: 75%; margin-left: 12.5%; }
+        .money-level:nth-child(7) { width: 70%; margin-left: 15%; }
+        .money-level:nth-child(6) { width: 65%; margin-left: 17.5%; }
+        .money-level:nth-child(5) { width: 60%; margin-left: 20%; }
+        .money-level:nth-child(4) { width: 55%; margin-left: 22.5%; }
+        .money-level:nth-child(3) { width: 50%; margin-left: 25%; }
+        .money-level:nth-child(2) { width: 45%; margin-left: 27.5%; }
+        .money-level:nth-child(1) { width: 40%; margin-left: 30%; }
+        
+        .money-level.current {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            color: #1a1a3a;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            animation: pulse 2s infinite;
+        }
+        
+        .money-level.previous {
+            background: linear-gradient(145deg, #ffe89e, #fff4cc);
+            color: #1a1a3a;
+            border-color: #ffe89e;
+            box-shadow: 0 0 8px rgba(255, 222, 130, 0.4);
+        }
+        
+        .money-level.gold {
+            background: linear-gradient(145deg, #ffd700, #ffed4e, #ffd700);
+            color: #1a1a3a;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            animation: goldShimmer 3s ease-in-out infinite;
+        }
+        
+        .money-level.gold::before {
+            content: '🏆';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            animation: trophyBounce 2s infinite;
+        }
+        
+        .money-level.gold::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: sparkle 4s linear infinite;
+        }
+        
+        .money-level.gold.current {
+            background: linear-gradient(145deg, #ffd700, #ffed4e, #ffd700);
+            color: #1a1a3a;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 1), inset 0 0 30px rgba(255, 255, 255, 0.5);
+            animation: goldShimmer 1.5s ease-in-out infinite, pulse 2s infinite;
+        }
+        
+        @keyframes goldShimmer {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.9), inset 0 0 30px rgba(255, 255, 255, 0.5); }
+        }
+        
+        @keyframes sparkle {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes trophyBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(-50%); }
+            40% { transform: translateY(-60%); }
+            60% { transform: translateY(-55%); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+        }
+        
+        .level-number {
+            font-size: 12px;
+        }
+        
+        .level-prize {
+            font-size: 12px;
+            position: absolute;
+            left: 15px;
+        }
+        
+        .sidebar-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            animation: fall 3s linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        /* Prize Popup Styles */
+        .prize-popup {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle, #ffd700 0%, #ff6b35 50%, #1a1a3a 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2500;
+          animation: prizeAppear 1.5s ease-in-out;
+        }
+        
+        .prize-content {
+          text-align: center;
+          position: relative;
+          background: linear-gradient(145deg, #2a2a5c, #1a1a3a);
+          padding: 80px 60px;
+          border-radius: 30px;
+          border: 6px solid #ffd700;
+          box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+        }
+        
+        .prize-fireworks {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        }
+        
+        .prize-title {
+          font-size: 56px;
+          font-weight: bold;
+          color: #ffd700;
+          text-shadow: 3px 3px 0px #ff6b35, 6px 6px 10px rgba(0,0,0,0.7);
+          margin-bottom: 20px;
+          animation: prizePulse 2s infinite;
+        }
+        
+        .prize-subtitle {
+          font-size: 32px;
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+          margin-bottom: 30px;
+        }
+        
+        .prize-emoji {
+          font-size: 80px;
+          animation: emojiSpin 3s infinite;
+          margin-bottom: 40px;
+        }
+        
+        .prize-continue {
+          cursor: pointer;
+        }
+        
+        .prize-button {
+          background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+          padding: 25px 50px;
+          border-radius: 50px;
+          border: 4px solid white;
+          box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .prize-button:hover {
+          transform: scale(1.1);
+          box-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 80px rgba(255, 215, 0, 0.6);
+        }
+        
+        .prize-button-text {
+          font-size: 24px;
+          font-weight: bold;
+          color: #1a1a3a;
+          text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        .prize-sparkles {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          font-size: 20px;
+          animation: sparkle 2s infinite;
+        }
+        
+        @keyframes prizeAppear {
+          0% { opacity: 0; transform: scale(0.3); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes prizePulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        /* Creative Bonus Round Styles */
+        .bonus-round-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ff6b35 0%, #8b2a8b 50%, #1a1a3a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: bonusAppear 2s ease-in-out;
+        }
+        
+        .bonus-container {
+            text-align: center;
+            position: relative;
+        }
+        
+        .bonus-fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: fireworkExplode 3s infinite;
+        }
+        
+        .firework:nth-child(1) {
+            top: 20%;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+        
+        .firework:nth-child(2) {
+            top: 30%;
+            right: 20%;
+            animation-delay: 1.5s;
+        }
+        
+        .firework:nth-child(3) {
+            bottom: 30%;
+            left: 30%;
+            animation-delay: 2.5s;
+        }
+        
+        .bonus-title {
+            font-size: 64px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 3px 3px 0px #ff6b35, 6px 6px 10px rgba(0,0,0,0.7);
+            margin-bottom: 20px;
+            animation: bonusPulse 2s infinite;
+        }
+        
+        .bonus-emoji {
+            font-size: 72px;
+            animation: emojiSpin 3s infinite;
+        }
+        
+        .bonus-subtitle {
+            font-size: 28px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 40px;
+        }
+        
+        .bonus-click-area {
+            cursor: pointer;
+        }
+        
+        .bonus-button {
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            padding: 30px 60px;
+            border-radius: 50px;
+            border: 5px solid white;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bonus-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 80px rgba(255, 215, 0, 0.6);
+        }
+        
+        .bonus-button-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a1a3a;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        .bonus-sparkles {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 20px;
+            animation: sparkle 2s infinite;
+        }
+        
+        /* Bonus Question Styles */
+        .bonus-question-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a3a 0%, #8b2a8b 50%, #ff6b35 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: questionSlideIn 1s ease-out;
+        }
+        
+        .bonus-question-container {
+            background: linear-gradient(145deg, #2a2a5c, #1a1a3a);
+            padding: 60px;
+            border-radius: 30px;
+            border: 5px solid #ffd700;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        .bonus-question-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin-bottom: 30px;
+            animation: titleGlow 2s infinite alternate;
+        }
+        
+        .bonus-question-text {
+            font-size: 36px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            margin-bottom: 40px;
+        }
+        
+        .bonus-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .bonus-option {
+            background: linear-gradient(145deg, #4a90e2, #357abd);
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .bonus-option:hover {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            color: #1a1a3a;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+        }
+        
+        .option-letter {
+            background: #ffd700;
+            color: #1a1a3a;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .option-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .bonus-option:hover .option-text {
+            color: #1a1a3a;
+        }
+        
+        /* Animations */
+        @keyframes bonusAppear {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes bonusPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes emojiSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fireworkExplode {
+            0% { 
+                transform: scale(0);
+                opacity: 1;
+                box-shadow: 0 0 0 0 #ffd700;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.6);
+            }
+            100% { 
+                transform: scale(2);
+                opacity: 0;
+                box-shadow: 0 0 40px 20px rgba(255, 215, 0, 0);
+            }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        @keyframes questionSlideIn {
+            0% { opacity: 0; transform: translateY(-100px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 2px 2px 4px rgba(0,0,0,0.7), 0 0 20px rgba(255, 215, 0, 0.5); }
+            100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.7), 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .exploding {
+            animation: explode 0.6s ease-in-out;
+        }
+        
+
+        </style>
+        </head>
+        <body>
+        <!-- Intro Animation -->
+        <div class="intro-overlay" id="introOverlay">
+            <div class="intro-logo" onclick="proceedFromIntro()" style="cursor: pointer;">
+                <div class="intro-logo-text">WEDDING<br>WEEKEND<br>MILJONAIRS</div>
+            </div>
+            <div class="intro-subtitle">Welkom bij de grootste trouwshow!</div>
+        </div>
+        
+        <!-- Round Popup -->
+        <div class="round-popup hidden" id="roundPopup">
+            <div class="popup-content">
+                <div class="popup-title" id="roundTitle">Ronde 1: Ruggetjes Samen</div>
+                <div class="continue-icon" onclick="startRound()">
+                    <img src="https://lh3.googleusercontent.com/d/1Mrg8qa656n85c3g1mna2RkxlWybBbVkC" alt="Round Image">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Image Popup -->
+        <div class="image-popup hidden" id="imagePopup" onclick="closeImagePopup()">
+            <img src="https://lh3.googleusercontent.com/d/1d24XWkGmaLGSv6HgRtRvbe3luxkIPmLn" alt="Answer Image">
+        </div>
+        <!-- Creative Bonus Round Popup -->
+        <div class="bonus-round-overlay hidden" id="bonusRoundOverlay">
+            <div class="bonus-container">
+                <div class="bonus-fireworks">
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                </div>
+                <div class="bonus-title">
+                    <span class="bonus-emoji"></span>
+                    BONUS RONDE!
+                    <span class="bonus-emoji"></span>
+                </div>
+                <div class="bonus-subtitle">De grote finale vraag!</div>
+                <div class="bonus-click-area" onclick="showBonusQuestion()">
+                    <div class="bonus-button">
+                        <span class="bonus-button-text">Jullie laaste kans op prijzen!</span>
+                        <div class="bonus-sparkles">✨✨✨</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Prize Popup -->
+        <div class="prize-popup hidden" id="prizePopup">
+          <div class="prize-content">
+            <div class="prize-fireworks">
+              <div class="firework"></div>
+              <div class="firework"></div>
+              <div class="firework"></div>
+            </div>
+            <div class="prize-title" id="prizeTitle">🏆 GEFELICITEERD! 🏆</div>
+            <div class="prize-subtitle" id="prizeSubtitle">Jullie hebben een prijs gewonnen!</div>
+            <div class="prize-emoji">🎉</div>
+            <div class="prize-continue" onclick="closePrizePopup()">
+              <div class="prize-button">
+                <span class="prize-button-text">Ga door!</span>
+                <div class="prize-sparkles">✨✨✨</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bonus Question Popup -->
+        <div class="bonus-question-overlay hidden" id="bonusQuestionOverlay">
+            <div class="bonus-question-container">
+                <div class="bonus-question-title">🏆 BONUS VRAAG 🏆</div>
+                <div class="bonus-question-text">Hoe eindigt deze quiz?</div>
+                <div class="bonus-options">
+                    <div class="bonus-option" onclick="selectBonusAnswer('A')">
+                        <span class="option-letter">A</span>
+                        <span class="option-text">Met een kus</span>
+                    </div>
+                    <div class="bonus-option" onclick="selectBonusAnswer('B')">
+                        <span class="option-letter">B</span>
+                        <span class="option-text">Met een applaus</span>
+                    </div>
+                    <div class="bonus-option" onclick="selectBonusAnswer('C')">
+                        <span class="option-letter">C</span>
+                        <span class="option-text">Met een toost</span>
+                    </div>
+                    <div class="bonus-option" onclick="selectBonusAnswer('D')">
+                        <span class="option-letter">D</span>
+                        <span class="option-text">Met een high-five</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game -->
+        <div class="container" id="gameContainer">
+            <div class="left-panel">
+                <div class="header">
+                    <div class="player-info">
+                        <h2 id="roundInfo">Ronde 1: Ruggetjes Samen</h2>
+                    </div>
+                </div>
+        
+                <div class="logo-section">
+                    <div class="help-buttons">
+                        <div class="help-btn" id="expertBtn" onclick="useHelp('expert')" title="Expert">🥸</div>
+                    </div>
+        
+                    <div class="logo">
+                        <div class="logo-text">WEDDING<br>WEEKEND<br>MILJONAIRS</div>
+                    </div>
+                </div>
+        
+                <div class="question-container">
+                    <div class="question-text" id="questionText">
+                        Welkom bij Trouw Weekend Miljonairs!
+                    </div>
+                </div>
+        
+                <div class="controls">
+                    <button class="control-btn correct-btn" onclick="answerCorrect()">Goed</button>
+                    <button class="control-btn wrong-btn" onclick="answerWrong()">Fout</button>
+                </div>
+            </div>
+        
+            <div class="right-panel">
+                <div class="money-ladder" id="moneyLadder">
+                    <!-- Money levels will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="celebration" id="celebration"></div>
+        
+        <script>
+        const rounds = [
+            {
+                name: "Ronde 1: Ruggetjes Samen",
+                questions: [
+                    "Wie heeft de beste smaak voor films?",
+                    "Wie heeft de broek aan in jullie relatie?",
+                    "Wie heeft het vaakst gelijk?",
+                    "Wie kan er het beste koken?"
+                ]
+            },
+            {
+                name: "Ronde 2: Raad Wat Er Staat",
+                questions: [
+                    "Ik heb Maik en/of Marit op de middelbare school leren kennen",
+                    "Ik ken Marit langer dan Maik",
+                    "Ik heb Maik ooit naakt gezien",
+                    "Mijn naam is Thijs"
+                ]
+            },
+            {
+                name: "Ronde 3: Wat Zie Ik?",
+                questions: [
+                    " ",
+                    " ",
+                    " ",
+                    " ", 
+                    " "
+                ]
+            },
+            {
+                name: "Bonus Ronde!",
+                questions: [
+                    "Hoe eindigt deze quiz?"
+            ]
+        }
+        ];
+        
+        const prizes = [
+            "","","","","","","","","","","",""
+        ];
+        
+        let currentLevel = 0;
+        let currentRound = 0;
+        let currentQuestionInRound = 0;
+        let gameStarted = false;
+        let helpUsed = { expert: false,};
+        let shouldShowImage = false;
+        let round3Images = [
+            {
+                question: "https://lh3.googleusercontent.com/d/15sTRPQ5DFbcrktdcPyaGJoFjeqXQeJbX",
+                answer: "https://lh3.googleusercontent.com/d/1TmhBYc6NBsdZw4NoI2gQtCWCK9iwNv5d"
+            },
+            {
+                question: "https://lh3.googleusercontent.com/d/1yOZ0mjZR8GkiKFK4pchIs6Cfjabt8tvG",
+                answer: "https://lh3.googleusercontent.com/d/1V6ea7ccsAuVkEcMhUyH-t69apRLlOZQs"
+            },
+            {
+                question: "https://lh3.googleusercontent.com/d/13Oa4e0sWMjABFSvHNmMipRebEVw_Qf0j ",
+                answer:  "https://lh3.googleusercontent.com/d/1U0x5xr_6uxr0wyu4kJGR5yLvuQdGd5JW "
+            },
+            {
+                question: "https://lh3.googleusercontent.com/d/1JDr0ZCa9MgFkB1d_ES-2wSsrKYWi7lKR",
+                answer: "https://lh3.googleusercontent.com/d/1ZYS7P-oJpAeM7LGJjGEBkGKi58qVOLhy "
+            }, 
+            {
+                question: "https://lh3.googleusercontent.com/d/1IQ33tUjzqM_RpWtfA-zoFNlYwBblaNIB",
+                answer: "https://lh3.googleusercontent.com/d/1y5WHFF6nVuw74IZQn4egD6iR3FlDFAIg "
+            }
+        ];
+let answerShown = false;
+
+        function getRoundImage(roundIndex) {
+            const images = [
+                "https://lh3.googleusercontent.com/d/1Mrg8qa656n85c3g1mna2RkxlWybBbVkC", // Ronde 1
+                "https://lh3.googleusercontent.com/d/1XH4mVIi3zbuProKzageSeBYdonRdZ_51", // Ronde 2
+                "https://lh3.googleusercontent.com/d/19l1Sb4lgI88-oPXRfnu6isV9k35ezB9L"  // Ronde 3
+            ];
+            return images[roundIndex] || images[0];
+        }
+        
+        function initGame() {
+            generateMoneyLadder();
+            updateCurrentLevel();
+        }
+        function proceedFromIntro() {
+            document.getElementById('introOverlay').style.display = 'none';
+          showRoundPopup();
+        }
+
+        function showRoundPopup() {
+            const popup = document.getElementById('roundPopup');
+            const title = document.getElementById('roundTitle');
+            const continueIcon = document.querySelector('.continue-icon img');
+            
+            if (currentRound < rounds.length) {
+                title.textContent = rounds[currentRound].name;
+                continueIcon.src = getRoundImage(currentRound);
+                popup.classList.remove('hidden');
+            }
+        }
+        
+        function startRound() {
+            document.getElementById('roundPopup').classList.add('hidden');
+            document.getElementById('gameContainer').classList.add('visible');
+            document.getElementById('roundInfo').textContent = rounds[currentRound].name;
+            
+            if (!gameStarted) {
+                gameStarted = true;
+                nextQuestion();
+            } else {
+                nextQuestion();
+            }
+        }
+        
+        function generateMoneyLadder() {
+            const ladder = document.getElementById('moneyLadder');
+            ladder.innerHTML = '';
+            
+            for (let i = prizes.length - 1; i >= 0; i--) {
+                const level = document.createElement('div');
+                level.className = 'money-level';
+                level.id = `level-${i}`;
+                
+                // Add gold class for levels 4, 8, and 12 (indices 3, 7, 11)
+                if (i === 3 || i === 7 || i === 11) {
+                    level.classList.add('gold');
+                }
+                
+                const prizeText = (i === 3 || i === 7 || i === 11) ?
+                    ` ${prizes[i]} ` : prizes[i];
+                
+                level.innerHTML = `
+                    <span class="level-prize">${prizeText}</span>
+                    <span class="level-number">${i + 1}</span>
+                `;
+                
+                ladder.appendChild(level);
+            }
+            
+            // Add the empty level at the bottom (after all other levels)
+            const emptyLevel = document.createElement('div');
+            emptyLevel.className = 'money-level';
+            emptyLevel.id = 'level--1';
+            emptyLevel.innerHTML = '';
+            ladder.appendChild(emptyLevel);
+        }        
+        function updateCurrentLevel() {
+            const allLevels = document.querySelectorAll('.money-level');
+            const totalLevels = allLevels.length;
+            
+            allLevels.forEach((level, index) => {
+                level.classList.remove('current', 'previous');
+                
+                const levelIndexFromBottom = totalLevels - 1 - index;
+                
+                if (levelIndexFromBottom < currentLevel) {
+                    level.classList.add('previous');
+                } else if (levelIndexFromBottom === currentLevel) {
+                    level.classList.add('current');
+                }
+            });
+        }
+        
+        function nextQuestion() {
+            if (currentRound < rounds.length && currentQuestionInRound < rounds[currentRound].questions.length) {
+                if (currentRound === 2) { // Round 3 (index 2)
+                    showRound3Question();
+                } else {
+                    document.getElementById('questionText').textContent = rounds[currentRound].questions[currentQuestionInRound];
+                }
+                currentQuestionInRound++;
+            } else if (currentRound < rounds.length - 1) {
+                // Move to next round
+                currentRound++;
+                currentQuestionInRound = 0;
+                if (currentRound === 3) { // Bonus round (index 3)
+                    showBonusRound();
+                } else {
+                    showRoundAnimation();
+                }
+            } else {
+                // Game finished
+                document.getElementById('questionText').textContent =
+                    'Gefeliciteerd! Jullie hebben alle ronden voltooid! 🎉';
+                createCelebration();
+            }
+        }        
+        function showRound3Question() {
+            const questionContainer = document.querySelector('.question-container');
+            const imageIndex = currentQuestionInRound; // Remove the -1 here
+            answerShown = false;
+            
+            if (imageIndex >= 0 && imageIndex < round3Images.length) {
+                questionContainer.innerHTML = `
+                    <img src="${round3Images[imageIndex].question}" alt="Round 3 Question" class="question-image" onclick="showAnswerImage()" />
+                `;
+            } else {
+                // Fallback to text question if no image
+                questionContainer.innerHTML = `
+                    <div class="question-text">${rounds[currentRound].questions[imageIndex]}</div>
+                `;
+            }
+        }
+
+        function showRoundAnimation() {
+            // Hide game temporarily and show round popup
+            document.getElementById('gameContainer').classList.remove('visible');
+            setTimeout(() => {
+                showRoundPopup();
+            }, 500);
+        }
+        
+        function answerCorrect() {
+          if (currentRound === 2 && !answerShown) { // Round 3
+            const imageIndex = currentQuestionInRound - 1;
+            if (imageIndex >= 0 && imageIndex < round3Images.length && round3Images[imageIndex].answer) {
+              // Show answer image if it exists
+              showAnswerImage(true);
+            } else {
+              // No answer image, proceed directly
+              proceedToNextRound3Question(true);
+            }
+            return;
+          }
+        
+          if (currentRound === 2 && answerShown) { // Round 3, answer already shown, proceed to next
+            proceedToNextRound3Question(true);
+            return;
+          }
+        
+          // Check if we should show the image popup (after second question in round 2)
+          if (currentRound === 0 && currentQuestionInRound === 2) {
+            shouldShowImage = true;
+          }
+        
+          if (currentLevel < prizes.length) {
+            currentLevel++;
+            updateCurrentLevel();
+            createCelebration();
+        
+            // Check if we reached a prize level (4 or 8)
+            if (currentLevel === 4 || currentLevel === 8) {
+              setTimeout(() => {
+                showPrizePopup(currentLevel);
+              }, 1500);
+            } else if (shouldShowImage) {
+              setTimeout(() => {
+                showImagePopup();
+              }, 1500);
+              shouldShowImage = false;
+            } else if (currentLevel === prizes.length) {
+              document.getElementById('questionText').textContent =
+                '🎉 GEFELICITEERD! Jullie hebben de hoofdprijs gewonnen! 🎉';
+            } else {
+              setTimeout(() => {
+                nextQuestion();
+              }, 1500);
+            }
+          }
+        }
+
+        function answerWrong() {
+            if (currentRound === 2 && !answerShown) { // Round 3
+                const imageIndex = currentQuestionInRound - 1;
+                if (imageIndex >= 0 && imageIndex < round3Images.length && round3Images[imageIndex].answer) {
+                    // Show answer image if it exists
+                    showAnswerImage(false);
+                } else {
+                    // No answer image, proceed directly
+                    proceedToNextRound3Question(false);
+                }
+                return;
+            }
+        
+            if (currentRound === 2 && answerShown) { // Round 3, answer already shown, proceed to next
+                proceedToNextRound3Question(false);
+                return;
+            }
+        
+            // Check if we should show the image popup (after second question in round 2)
+            if (currentRound === 0 && currentQuestionInRound === 2) {
+                shouldShowImage = true;
+            }
+        
+            if (shouldShowImage) {
+                setTimeout(() => {
+                    showImagePopup();
+                }, 1500);
+                shouldShowImage = false;
+            } else {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1500);
+            }
+        }
+        
+        function useHelp(type) {
+            const btn = document.getElementById(type + 'Btn');
+            if (!helpUsed[type]) {
+                helpUsed[type] = true;
+                btn.classList.add('used');
+            }
+        }
+
+        function createCelebration() {
+            const celebration = document.getElementById('celebration');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = ['#ffd700', '#ff6b35', '#4a90e2', '#28a745'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                
+                celebration.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        function resetGame() {
+            currentLevel = 0;
+            currentRound = 0;
+            currentQuestionInRound = 0;
+            gameStarted = false;
+            helpUsed = { audience: false, fifty: false };
+            
+            document.getElementById('audienceBtn').classList.remove('used');
+            document.getElementById('fiftyBtn').classList.remove('used');
+            
+            updateCurrentLevel();
+            document.getElementById('gameContainer').classList.remove('visible');
+            document.getElementById('introOverlay').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('introOverlay').style.display = 'none';
+                showRoundPopup();
+            }, 2000);
+        }
+
+        function toggleMusic() {
+            alert('Muziek functie beschikbaar in volledige versie! 🎵');
+        }
+        function showImagePopup() {
+            document.getElementById('imagePopup').classList.remove('hidden');
+            }
+
+        function showAnswerImage(correct = false) {
+            const questionContainer = document.querySelector('.question-container');
+            answerShown = true;
+        
+            const overlay = document.createElement('img');
+            const imageIndex = currentQuestionInRound - 1;
+            overlay.src = round3Images[imageIndex].answer;
+            overlay.alt = 'Answer';
+            overlay.className = 'answer-overlay';
+            overlay.style.position = 'absolute';
+            overlay.style.top = '50%';
+            overlay.style.left = '50%';
+            overlay.style.transform = 'translate(-50%, -50%)';
+            overlay.style.cursor = 'pointer';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.objectFit = 'contain';
+            overlay.style.maxWidth = '100%';
+            overlay.style.maxHeight = '400px';
+        
+            questionContainer.style.position = 'relative';
+            questionContainer.appendChild(overlay);
+        
+            setTimeout(() => {
+                overlay.classList.add('show');
+            }, 100);
+        
+            overlay.addEventListener('click', function () {
+                if (correct && currentLevel < prizes.length) {
+                    currentLevel++;
+                    updateCurrentLevel();
+                    createCelebration();
+        
+                    if (currentLevel === prizes.length) {
+                        questionContainer.innerHTML = '<div class="question-text">🎉 GEFELICITEERD! Jullie hebben de hoofdprijs gewonnen! 🎉</div>';
+                    } else {
+                        setTimeout(() => {
+                            nextQuestion();
+                        }, 1500);
+                    }
+                } else {
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 1500);
+                }
+            });
+        }
+
+        function proceedToNextRound3Question(correct = false) {
+            answerShown = false;
+        
+            if (correct && currentLevel < prizes.length) {
+                currentLevel++;
+                updateCurrentLevel();
+                createCelebration();
+        
+                if (currentLevel === prizes.length) {
+                    const questionContainer = document.querySelector('.question-container');
+                    questionContainer.innerHTML = '<div class="question-text">🎉 GEFELICITEERD! Jullie hebben de hoofdprijs gewonnen! 🎉</div>';
+                } else {
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 1500);
+                }
+            } else {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1500);
+            }
+        }
+
+
+
+        function closeImagePopup() {
+            console.log('closeImagePopup called!');
+            const popup = document.getElementById('imagePopup');
+            if (popup) {
+                popup.classList.add('hidden');
+                console.log('Popup hidden');
+                setTimeout(() => {
+                    nextQuestion();
+                }, 500);
+            } else {
+                console.log('ERROR: Could not find popup to close');
+            }
+        }
+
+        function showImagePopup() {
+            console.log('showImagePopup called!');
+            const popup = document.getElementById('imagePopup');
+            console.log('Popup element:', popup);
+            if (popup) {
+                popup.classList.remove('hidden');
+                console.log('Popup should now be visible');
+            } else {
+                console.log('ERROR: Popup element not found!');
+            }
+        }
+        function showBonusRound() {
+            document.getElementById('gameContainer').classList.remove('visible');
+            document.getElementById('bonusRoundOverlay').classList.remove('hidden');
+        }
+        
+        function showBonusQuestion() {
+            document.getElementById('bonusRoundOverlay').classList.add('hidden');
+            document.getElementById('bonusQuestionOverlay').classList.remove('hidden');
+        }
+        function explodeMoneyLadder() {
+            const allLevels = document.querySelectorAll('.money-level');
+            const actualLevels = Array.from(allLevels).slice(0, -1); // Remove the empty level at bottom
+            
+            // First, clear all current styling
+            actualLevels.forEach(level => {
+                level.classList.remove('current', 'previous', 'exploding');
+            });
+            
+            // Then animate from bottom to top (reverse order)
+            actualLevels.reverse().forEach((level, index) => {
+                setTimeout(() => {
+                    level.classList.add('previous'); // Show as achieved, not current
+                    level.classList.add('exploding');
+                }, index * 200); // Slower animation (200ms between each)
+            });
+            
+            // Final celebration with all levels gold
+            setTimeout(() => {
+                actualLevels.forEach(level => {
+                    level.classList.add('gold');
+                });
+                
+                // Big celebration
+                createCelebration();
+                createCelebration(); // Double celebration for extra effect
+                
+                document.getElementById('questionText').textContent =
+                    '🎉 FANTASTISCH! Jullie hebben alles gewonnen! De quiz is afgelopen! 🎉';
+            }, actualLevels.length * 200 + 500); // Wait for animation to finish + 500ms
+        }
+
+        function selectBonusAnswer(answer) {
+            document.getElementById('bonusQuestionOverlay').classList.add('hidden');
+            document.getElementById('gameContainer').classList.add('visible');
+            // Clear the question container first before showing final message
+            const questionContainer = document.querySelector('.question-container');
+            questionContainer.innerHTML = '<div class="question-text">Mega Bruiloft Winnaars XXL - Liefde + Slimheid = Jackpot 🤵👰</div>';
+            explodeMoneyLadder();
+        }
+
+        
+        function showPrizePopup(level) {
+          const popup = document.getElementById('prizePopup');
+          const title = document.getElementById('prizeTitle');
+          const subtitle = document.getElementById('prizeSubtitle');
+          
+          if (level === 4) {
+            title.textContent = 'Een Prijsje!';
+            subtitle.textContent = 'Jullie hebben wat gewonnen!';
+          } else if (level === 8) {
+            title.textContent = '️Nog een prijsje!️';
+            subtitle.textContent = 'Jullie hebben weer wat gewonnen!';
+          }
+          
+          popup.classList.remove('hidden');
+        }
+        
+        function closePrizePopup() {
+          const popup = document.getElementById('prizePopup');
+          popup.classList.add('hidden');
+          
+          if (shouldShowImage) {
+            setTimeout(() => {
+              showImagePopup();
+            }, 500);
+            shouldShowImage = false;
+          } else if (currentLevel === prizes.length) {
+            document.getElementById('questionText').textContent =
+              '🎉 GEFELICITEERD! Jullie hebben de hoofdprijs gewonnen! 🎉';
+          } else {
+            setTimeout(() => {
+              nextQuestion();
+            }, 500);
+          }
+        }
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body
